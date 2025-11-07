@@ -1,21 +1,30 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { CreateMovieReq, Movie } from "../@types/movie";
+import { CreateMovieReq, MovieResponse } from "../@types/movie";
 
 export const movieApi = createApi({
   reducerPath: "movieApi",
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_API_URL }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: process.env.REACT_APP_API_URL,
+    prepareHeaders: (headers: Headers) => {
+      const token = process.env.REACT_APP_API_TOKEN;
+      if (token) {
+        headers.set("Authorization", `${token}`);
+      }
+      return headers;
+    },
+  }),
   tagTypes: ["Movie"],
   endpoints: (builder) => ({
-    getMovies: builder.query<Movie[], void>({
+    getMovies: builder.query<MovieResponse, void>({
       query: () => "/movies",
       providesTags: ["Movie"],
     }),
 
-    getMovie: builder.query<Movie, string>({
+    getMovie: builder.query<MovieResponse, string>({
       query: (id) => `/movies/${id}`,
     }),
 
-    createMovie: builder.mutation<Movie, CreateMovieReq>({
+    createMovie: builder.mutation<MovieResponse, CreateMovieReq>({
       query: (movie) => ({
         url: "/movies",
         method: "POST",
@@ -32,7 +41,10 @@ export const movieApi = createApi({
       invalidatesTags: ["Movie"],
     }),
 
-    searchMovies: builder.query<Movie[], { title?: string; actor?: string }>({
+    searchMovies: builder.query<
+      MovieResponse,
+      { title?: string; actor?: string }
+    >({
       query: (params) => ({
         url: "/movies",
         params,

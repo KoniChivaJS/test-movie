@@ -1,3 +1,11 @@
+export interface MovieResponse {
+  data: Movie[];
+  meta: {
+    total: number;
+  };
+  status: number;
+}
+
 export interface Movie {
   id: string;
   title: string;
