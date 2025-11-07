@@ -12,7 +12,7 @@ REACT_APP_API_URL=API ВАШОГО БЕКЕНДУ
 
 docker pull konichivajs/movies:latest
 
-DockerHub - [text](https://hub.docker.com/r/konichivajs/movies)
+DockerHub - [link](https://hub.docker.com/r/konichivajs/movies)
 
 ## Запустити контейнер:
 
