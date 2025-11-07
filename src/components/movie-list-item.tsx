@@ -1,7 +1,6 @@
 import React from "react";
 import { Movie } from "../@types/movie";
 import {
-  Box,
   Chip,
   IconButton,
   TableCell,
@@ -9,13 +8,19 @@ import {
   Typography,
 } from "@mui/material";
 import { Eye, Trash } from "lucide-react";
+import { NavLink } from "react-router";
 
 interface Props {
   className?: string;
   movie: Movie;
+  onDelete: (id: string) => void;
 }
 
-export const MovieListItem: React.FC<Props> = ({ className, movie }) => {
+export const MovieListItem: React.FC<Props> = ({
+  className,
+  movie,
+  onDelete,
+}) => {
   return (
     <TableRow>
       <TableCell>
@@ -32,28 +37,15 @@ export const MovieListItem: React.FC<Props> = ({ className, movie }) => {
           size="small"
         />
       </TableCell>
-      <TableCell>
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-          {movie.actors?.slice(0, 3).map((actor, index) => (
-            <Chip key={index} label={actor} size="small" variant="outlined" />
-          ))}
-          {movie.actors?.length > 3 && (
-            <Chip label={`+${movie.actors.length - 3} more`} size="small" />
-          )}
-        </Box>
-      </TableCell>
       <TableCell align="center">
-        <IconButton
-          color="info"
-          //   onClick={() => onViewMovie(movie)}
-          size="small"
-        >
-          <Eye />
-        </IconButton>
+        <NavLink to={`/movies/${movie.id}`}>
+          <IconButton color="info" size="small">
+            <Eye />
+          </IconButton>
+        </NavLink>
         <IconButton
           color="error"
-          //   onClick={() => handleDelete(movie.id)}
-          //   disabled={deletingId === movie.id}
+          onClick={() => onDelete(movie.id)}
           size="small"
         >
           <Trash />

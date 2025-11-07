@@ -10,14 +10,15 @@ import {
   TableRow,
 } from "@mui/material";
 import { MovieListItem } from "./movie-list-item";
+import { useDeleteMovieMutation } from "../services/movie-api";
+import toast from "react-hot-toast";
+import { Loader } from "./common/loader";
 
 interface Props {
   className?: string;
   movies: Movie[];
   loading?: boolean;
   error?: boolean;
-  onDelete: (id: string) => void;
-  onView: (id: string) => void;
 }
 
 export const MovieList: React.FC<Props> = ({
@@ -25,10 +26,20 @@ export const MovieList: React.FC<Props> = ({
   movies,
   loading,
   error,
-  onDelete,
-  onView,
 }) => {
-  if (loading) return <div>Loading...</div>;
+  const [deleteMovie] = useDeleteMovieMutation();
+
+  const handleDeleteMovie = async (id: string) => {
+    try {
+      await deleteMovie(id).unwrap();
+      toast.success("Movie deleted successfully");
+    } catch (error: unknown) {
+      console.error(error);
+      toast.error("Failed to delete movie");
+    }
+  };
+
+  if (loading) return <Loader />;
   if (error) return <div>Something went wrong while fetching movies</div>;
   if (!movies || movies.length === 0) return <div>No movies found</div>;
 
@@ -37,16 +48,19 @@ export const MovieList: React.FC<Props> = ({
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Title</TableCell>
+            <TableCell sx={{ width: "720px" }}>Title</TableCell>
             <TableCell>Year</TableCell>
             <TableCell>Format</TableCell>
-            <TableCell>Actors</TableCell>
             <TableCell align="center">Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {movies.map((movie) => (
-            <MovieListItem movie={movie} key={movie.id} />
+            <MovieListItem
+              movie={movie}
+              key={movie.id}
+              onDelete={handleDeleteMovie}
+            />
           ))}
         </TableBody>
       </Table>

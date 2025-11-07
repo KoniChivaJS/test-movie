@@ -1,5 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { CreateMovieReq, MovieResponse } from "../@types/movie";
+import {
+  CreateMovieReq,
+  MovieResponse,
+  SearchMovieResponse,
+} from "../@types/movie";
 
 export const movieApi = createApi({
   reducerPath: "movieApi",
@@ -15,12 +19,21 @@ export const movieApi = createApi({
   }),
   tagTypes: ["Movie"],
   endpoints: (builder) => ({
-    getMovies: builder.query<MovieResponse, void>({
-      query: () => "/movies",
+    getMovies: builder.query<
+      MovieResponse,
+      { sort?: string; order?: "ASC" | "DESC" } | void
+    >({
+      query: (params) => ({
+        url: "/movies",
+        params: {
+          sort: params?.sort || "title",
+          order: params?.order || "ASC",
+        },
+      }),
       providesTags: ["Movie"],
     }),
 
-    getMovie: builder.query<MovieResponse, string>({
+    getMovie: builder.query<SearchMovieResponse, string>({
       query: (id) => `/movies/${id}`,
     }),
 

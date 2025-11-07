@@ -6,12 +6,25 @@ export interface MovieResponse {
   status: number;
 }
 
+export interface SearchMovieResponse {
+  data: Movie;
+}
+
 export interface Movie {
   id: string;
   title: string;
   year: number;
   format: "VHS" | "DVD" | "Blu-ray";
-  actors: string[];
+  actors: IActor[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IActor {
+  id: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CreateMovieReq {

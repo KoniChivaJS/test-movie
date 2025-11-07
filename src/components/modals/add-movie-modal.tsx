@@ -32,13 +32,8 @@ export const AddMovieModal: React.FC<Props> = ({ className }) => {
   };
 
   return (
-    <>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleOpen}
-        sx={{ mt: 5 }}
-      >
+    <div className="flex items-center">
+      <Button variant="contained" color="primary" onClick={handleOpen}>
         Add Movie
       </Button>
 
@@ -52,6 +47,6 @@ export const AddMovieModal: React.FC<Props> = ({ className }) => {
           </Button>
         </DialogActions>
       </Dialog>
-    </>
+    </div>
   );
 };
