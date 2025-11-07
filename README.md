@@ -16,6 +16,7 @@ DockerHub - [link](https://hub.docker.com/r/konichivajs/movies)
 
 ## Запустити контейнер:
 
+Додаток підтримує конфігурування URL бекенду через змінні оточення (REACT_APP_API_URL) запуск відбувається однією командою:  
 docker run --name movies -p 3000:3000 -e REACT_APP_API_URL=http://localhost:8000/api/v1 konichivajs/movies
 
 Доступ до додатку - http://localhost:3000
