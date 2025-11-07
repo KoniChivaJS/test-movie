@@ -10,7 +10,8 @@ export const movieApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_API_URL,
     prepareHeaders: (headers: Headers) => {
-      const token = process.env.REACT_APP_API_TOKEN;
+      const token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjI0OTcyMjYwfQ.X31cryg_A126WLYT96PD-SLLFWSxb2SeoQZ4cvx3VhU";
       if (token) {
         headers.set("Authorization", `${token}`);
       }
