@@ -54,7 +54,11 @@ export const CreateMovie: React.FC<Props> = ({ className, onSubmit }) => {
         <Stack spacing={2}>
           <TextField
             label="Title"
-            {...register("title", { required: "Title is required" })}
+            {...register("title", {
+              required: "Title is required",
+              validate: (value) =>
+                value.trim() !== "" || "Title cannot be empty or spaces only",
+            })}
             error={!!errors.title}
             helperText={errors.title?.message}
             fullWidth
@@ -98,7 +102,20 @@ export const CreateMovie: React.FC<Props> = ({ className, onSubmit }) => {
 
           <TextField
             label="Actors (comma separated)"
-            {...register("actors", { required: "Actors are required" })}
+            {...register("actors", {
+              required: "Actors are required",
+              validate: (value) => {
+                const actors = value.split(",").map((a) => a.trim());
+                if (actors.some((a) => a === "")) {
+                  return "Actor names cannot be empty or only spaces";
+                }
+                const pattern = /^[A-Za-zÀ-ÖØ-öø-ÿ\s\-.]+$/;
+                if (!actors.every((a) => pattern.test(a))) {
+                  return "Actors can only contain letters, spaces, '-' and '.'";
+                }
+                return true;
+              },
+            })}
             placeholder="Actor 1, Actor 2"
             fullWidth
             error={!!errors.actors}

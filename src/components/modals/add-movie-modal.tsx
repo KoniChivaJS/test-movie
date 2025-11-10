@@ -16,7 +16,7 @@ export const AddMovieModal: React.FC<Props> = ({ className }) => {
 
   const handleSubmit = async (data: IMovieForm) => {
     try {
-      await createMovie({
+      const response = await createMovie({
         ...data,
         actors:
           typeof data.actors === "string"
@@ -24,6 +24,12 @@ export const AddMovieModal: React.FC<Props> = ({ className }) => {
             : data.actors,
       }).unwrap();
 
+      if (response?.status === 0) {
+        toast.error("Movie already exists or something went wrong");
+        return;
+      }
+
+      toast.success("Movie added successfully");
       handleClose();
     } catch (err: unknown) {
       console.error(err);

@@ -10,16 +10,33 @@ interface Props {
 }
 
 export const Home: React.FC<Props> = ({ className }) => {
-  const { movies, isLoading, isError, handleSearch } = useMovieSearch();
+  const {
+    movies,
+    total,
+    isLoading,
+    isError,
+    currentPage,
+    moviesPerPage,
+    handleChangePage,
+    handleSearch,
+  } = useMovieSearch();
 
   return (
     <div className={className}>
-      <MovieSearch handleSearch={handleSearch} />
-      <MovieList movies={movies ?? []} loading={isLoading} error={isError} />
-      <div className="w-full flex gap-5 items-center mt-5">
+      <div className="w-full flex gap-5 items-center mb-5">
         <AddMovieModal />
         <ImportMovies />
       </div>
+      <MovieSearch handleSearch={handleSearch} />
+      <MovieList
+        movies={movies ?? []}
+        loading={isLoading}
+        error={isError}
+        currentPage={currentPage}
+        total={total ?? 0}
+        moviesPerPage={moviesPerPage}
+        handleChangePage={handleChangePage}
+      />
     </div>
   );
 };

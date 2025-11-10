@@ -45,12 +45,30 @@ export const ImportMovies: React.FC = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      toast.error("No file selected");
+      return;
+    }
+
+    if (file.size === 0) {
+      toast.error("The file is empty");
+      return;
+    }
+
+    if (!file.name.endsWith(".txt")) {
+      toast.error("Invalid file format. Please upload a .txt file");
+      return;
+    }
 
     try {
       toast.loading("Importing movies...");
       const text = await readFileAsText(file);
       const movies = parseMoviesFromText(text);
+
+      if (movies.length === 0) {
+        toast.error("Invalid data. No movies found in the file");
+        return;
+      }
 
       for (const movie of movies) {
         try {
@@ -64,7 +82,7 @@ export const ImportMovies: React.FC = () => {
     } catch (err: unknown) {
       toast.error("Failed to import movies");
     } finally {
-      toast.dismiss();
+      setTimeout(() => toast.dismiss(), 1000);
     }
   };
 

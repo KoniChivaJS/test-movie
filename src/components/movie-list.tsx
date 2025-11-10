@@ -1,6 +1,7 @@
 import React from "react";
 import { Movie } from "../@types/movie";
 import {
+  Pagination,
   Paper,
   Table,
   TableBody,
@@ -19,6 +20,10 @@ interface Props {
   movies: Movie[];
   loading?: boolean;
   error?: boolean;
+  currentPage: number;
+  total: number;
+  moviesPerPage: number;
+  handleChangePage: (page: number) => void;
 }
 
 export const MovieList: React.FC<Props> = ({
@@ -26,6 +31,10 @@ export const MovieList: React.FC<Props> = ({
   movies,
   loading,
   error,
+  currentPage,
+  total,
+  moviesPerPage,
+  handleChangePage,
 }) => {
   const [deleteMovie] = useDeleteMovieMutation();
 
@@ -55,7 +64,7 @@ export const MovieList: React.FC<Props> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {movies.map((movie) => (
+          {movies.map((movie: Movie) => (
             <MovieListItem
               movie={movie}
               key={movie.id}
@@ -64,6 +73,16 @@ export const MovieList: React.FC<Props> = ({
           ))}
         </TableBody>
       </Table>
+      {total > 1 && (
+        <Pagination
+          count={Math.ceil(total / moviesPerPage)}
+          page={currentPage}
+          onChange={(e, page) => handleChangePage(page)}
+          color="primary"
+          shape="rounded"
+          className="mt-2 self-center p-2"
+        />
+      )}
     </TableContainer>
   );
 };

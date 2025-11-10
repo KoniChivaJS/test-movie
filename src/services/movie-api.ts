@@ -22,13 +22,20 @@ export const movieApi = createApi({
   endpoints: (builder) => ({
     getMovies: builder.query<
       MovieResponse,
-      { sort?: string; order?: "ASC" | "DESC" } | void
+      {
+        sort?: string;
+        order?: "ASC" | "DESC";
+        limit?: number;
+        offset?: number;
+      } | void
     >({
       query: (params) => ({
         url: "/movies",
         params: {
           sort: params?.sort || "title",
           order: params?.order || "ASC",
+          limit: params?.limit,
+          offset: params?.offset,
         },
       }),
       providesTags: ["Movie"],
@@ -57,7 +64,7 @@ export const movieApi = createApi({
 
     searchMovies: builder.query<
       MovieResponse,
-      { title?: string; actor?: string }
+      { title?: string; actor?: string; limit?: number; offset?: number }
     >({
       query: (params) => ({
         url: "/movies",
